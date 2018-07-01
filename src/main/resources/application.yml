@@ -1,0 +1,22 @@
+server:
+  port: 8888
+
+spring:
+  datasource:
+   #url: jdbc:mysql://95.216.9.60:3306/javbus?characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/javbus?characterEncoding=UTF-8
+    username: root
+    #password: 7cJoJV29dFHUzd2p
+    password: 12345678
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+    pool:
+      max-idle: 100
+      min-idle: 1
+      max-active: 1000
+      max-wait: -1
+  thymeleaf:
+    cache: false
