@@ -96,18 +96,31 @@ public class JavProxyPoolProcessor implements PageProcessor {
         headers.put("accept","*/*");
         headers.put("accept-language","zh-CN,zh;q=0.9");
         headers.put("referer","https://www.javbus.com/"+avCode);
+        headers.put("accept-language","zh-CN,zh;q=0.9");
+        headers.put("user-agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
         headers.put("x-requested-with","XMLHttpRequest");
         Map<String,String> cookies = new HashMap<>();
         cookies.put("__cfduid","d8e8d517716d6f16974aaf77f8821f0901530025670");
         cookies.put("PHPSESSID","vhqldbflrhl8bek4h1jqpo7tk0");
         cookies.put("HstCfa2807330","1530025681968");
         cookies.put("HstCmu2807330","1530025681968");
+        cookies.put("starinfo","glyphicon glyphicon-minus");
         cookies.put("HstCnv2807330","5");
         cookies.put("HstCns2807330","12");
         cookies.put("HstCla2807330","1530447264562");
         cookies.put("HstPn2807330","17");
         cookies.put("HstPt2807330","38");
-        cookies.put("starinfo","glyphicon%20glyphicon-minus");
+        cookies.put("__cfduid","d8e8d517716d6f16974aaf77f8821f0901530025670");
+        cookies.put("PHPSESSID","vhqldbflrhl8bek4h1jqpo7tk0");
+        cookies.put("HstCfa2807330","1530025681968");
+        cookies.put("HstCmu2807330","1530025681968");
+        cookies.put("starinfo","glyphicon glyphicon-minus");
+        cookies.put("HstCnv2807330","5");
+        cookies.put("HstCns2807330","12");
+        cookies.put("HstCla2807330","1530447264562");
+        cookies.put("HstPn2807330","17");
+        cookies.put("HstPt2807330","38");
+
  //       accept: */*
 //accept-encoding: gzip, deflate, br
 //accept-language:
@@ -128,10 +141,9 @@ public class JavProxyPoolProcessor implements PageProcessor {
         try {
             jsonComment = Jsoup.
                     connect("https://www.javbus.com/ajax/uncledatoolsbyajax.php?gid=" + gid.trim() + "&lang=zh&img="+img+"uc=0&floor=674")
+                    .referrer("https://www.javbus.com/"+avCode)
                     .proxy(ip,port)
-                    .headers(headers)
-                    .cookies(cookies)
-                    .get().html();
+                    .get().html().toString();
                  //   .get().toString();
         } catch (Exception e) {
             e.printStackTrace();
