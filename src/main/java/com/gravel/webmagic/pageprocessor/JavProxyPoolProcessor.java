@@ -2,9 +2,8 @@ package com.gravel.webmagic.pageprocessor;
 
 import com.gravel.domain.Movies;
 import com.gravel.utils.UserAgentUtil;
-import com.gravel.webmagic.downloader.MyProxyProvider;
-import com.gravel.webmagic.pipeline.IPSpiderPipeline;
-import lombok.experimental.var;
+import com.gravel.webmagic.pipeline.JvaSpiderPipeline;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -13,12 +12,10 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.proxy.Proxy;
-import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.proxy.SimpleProxyProvider;
-import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +25,7 @@ import java.util.Map;
  */
 @Component
 public class JavProxyPoolProcessor implements PageProcessor {
+    private final static String authHeader = authHeader("ZF201841982132k9HuP", "1b08e7d255d6412bb8b539e8196a9d2f", (int) (new Date().getTime()/1000));
 
     private Site site = Site.me().setDisableCookieManagement(true)
             .setTimeOut(6000).setRetryTimes(3)
@@ -74,10 +72,12 @@ public class JavProxyPoolProcessor implements PageProcessor {
             m.setCategories(categories.substring(0,categories.length()-1).toString());
             m.setDownloadUrl(downloadUrl);
             m.setPicUrl(picUrl);
-            page.putField("result", m);
+            if(!StringUtils.isEmpty(downloadUrl)){
+                page.putField("result", m);
+            }
         }
 
-        for(int i=0;i<2;i++) {
+        for(int i=0;i<71;i++) {
             page.addTargetRequest("http://www.javbus.com/page/"+(i+1)+"/");
         }
     }
@@ -89,67 +89,36 @@ public class JavProxyPoolProcessor implements PageProcessor {
      * @return
      */
     public static String crawlDownloadUrl(String gid,String img,String avCode) {
-        String jsonComment = "";
-        final String ip = "127.0.0.1";
-        final int port = 1080;
-        Map<String,String> headers = new HashMap<>();
-        headers.put("accept","*/*");
-        headers.put("accept-language","zh-CN,zh;q=0.9");
-        headers.put("referer","https://www.javbus.com/"+avCode);
-        headers.put("accept-language","zh-CN,zh;q=0.9");
-        headers.put("user-agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
-        headers.put("x-requested-with","XMLHttpRequest");
-        Map<String,String> cookies = new HashMap<>();
-        cookies.put("__cfduid","d8e8d517716d6f16974aaf77f8821f0901530025670");
-        cookies.put("PHPSESSID","vhqldbflrhl8bek4h1jqpo7tk0");
-        cookies.put("HstCfa2807330","1530025681968");
-        cookies.put("HstCmu2807330","1530025681968");
-        cookies.put("starinfo","glyphicon glyphicon-minus");
-        cookies.put("HstCnv2807330","5");
-        cookies.put("HstCns2807330","12");
-        cookies.put("HstCla2807330","1530447264562");
-        cookies.put("HstPn2807330","17");
-        cookies.put("HstPt2807330","38");
-        cookies.put("__cfduid","d8e8d517716d6f16974aaf77f8821f0901530025670");
-        cookies.put("PHPSESSID","vhqldbflrhl8bek4h1jqpo7tk0");
-        cookies.put("HstCfa2807330","1530025681968");
-        cookies.put("HstCmu2807330","1530025681968");
-        cookies.put("starinfo","glyphicon glyphicon-minus");
-        cookies.put("HstCnv2807330","5");
-        cookies.put("HstCns2807330","12");
-        cookies.put("HstCla2807330","1530447264562");
-        cookies.put("HstPn2807330","17");
-        cookies.put("HstPt2807330","38");
-
- //       accept: */*
-//accept-encoding: gzip, deflate, br
-//accept-language:
-//cookie: __cfduid=d8e8d517716d6f16974aaf77f8821f0901530025670;
-// PHPSESSID=vhqldbflrhl8bek4h1jqpo7tk0;
-// HstCfa2807330=1530025681968;
-// HstCmu2807330=1530025681968;
-// starinfo=glyphicon%20glyphicon-minus;
-// HstCnv2807330=5; HstCns2807330=12;
-// HstCla2807330=1530447264562; HstPn2807330=17;
-// HstPt2807330=38;
-
-//referer: https://www.javbus.com/VAGU-193
-//user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
-//x-requested-with: XMLHttpRequest
-
-        https://www.javbus.com/ajax/uncledatoolsbyajax.php?gid=37227545248&lang=zh&img=https://pics.javbus.com/cover/6kgd_b.jpg&uc=0&floor=674
+        String targetUrl = "";
+        String downloadUrl = "";
+        final String ip = "forward.xdaili.cn";//这里以正式服务器ip地址为准
+        final int port = 80;//这里以正式服务器端口地址为准
         try {
-            jsonComment = Jsoup.
-                    connect("https://www.javbus.com/ajax/uncledatoolsbyajax.php?gid=" + gid.trim() + "&lang=zh&img="+img+"uc=0&floor=674")
-                    .referrer("https://www.javbus.com/"+avCode)
+            targetUrl = Jsoup.
+                    connect("http://alicili.cc/list/"+avCode+"/1-0-0/")
+                    .userAgent(UserAgentUtil.getRandomUserAgent())
                     .proxy(ip,port)
-                    .get().html().toString();
-                 //   .get().toString();
+                    .header("Proxy-Authorization", authHeader)
+                    .get().body().getElementsByClass("item")
+                    .first()
+                    .getElementsByTag("a").first().attr("href");
+
+            downloadUrl  = Jsoup.
+                    connect(targetUrl)
+                    .userAgent(UserAgentUtil.getRandomUserAgent())
+                    .proxy(ip,port)
+                    .header("Proxy-Authorization", authHeader)
+                    .get()
+                    .body()
+                    .getElementsByClass("dd magnet")
+                    .first()
+                    .getElementsByTag("a")
+                    .first().attr("href");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return jsonComment;
+        return downloadUrl;
     }
 
     @Override
@@ -157,7 +126,7 @@ public class JavProxyPoolProcessor implements PageProcessor {
         return site;
     }
 
-    public void start(JavProxyPoolProcessor processor, IPSpiderPipeline ipPipeline) {
+    public void start(JavProxyPoolProcessor processor, JvaSpiderPipeline ipPipeline) {
         final String ip = "127.0.0.1";
         final int port = 1080;
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
@@ -169,5 +138,26 @@ public class JavProxyPoolProcessor implements PageProcessor {
                 .setDownloader(httpClientDownloader)
                 .addPipeline(ipPipeline)
                 .run();
+    }
+
+    /**
+     * http://www.xdaili.cn/usercenter/order
+     * 讯代理 买了10W 的
+     * @param orderno
+     * @param secret
+     * @param timestamp
+     * @return
+     */
+
+    public static String authHeader(String orderno, String secret, int timestamp){
+        //拼装签名字符串
+        String planText = String.format("orderno=%s,secret=%s,timestamp=%d", orderno, secret, timestamp);
+
+        //计算签名
+        String sign = org.apache.commons.codec.digest.DigestUtils.md5Hex(planText).toUpperCase();
+
+        //拼装请求头Proxy-Authorization的值
+        String authHeader = String.format("sign=%s&orderno=%s&timestamp=%d", sign, orderno, timestamp);
+        return authHeader;
     }
 }

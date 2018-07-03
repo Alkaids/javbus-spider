@@ -2,7 +2,7 @@ package com.gravel.controller;
 
 import com.gravel.redis.RedisService;
 import com.gravel.webmagic.pageprocessor.JavProxyPoolProcessor;
-import com.gravel.webmagic.pipeline.IPSpiderPipeline;
+import com.gravel.webmagic.pipeline.JvaSpiderPipeline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class StartUpController {
 
     @Autowired
-    IPSpiderPipeline ipSpiderPipeline;
+    JvaSpiderPipeline jvaSpiderPipeline;
 
     @Autowired
     JavProxyPoolProcessor kdlProcessor;
@@ -28,7 +28,7 @@ public class StartUpController {
      */
     @RequestMapping("/")
     public String index() {
-        new Thread(() -> kdlProcessor.start(kdlProcessor, ipSpiderPipeline)).start();
+        new Thread(() -> kdlProcessor.start(kdlProcessor, jvaSpiderPipeline)).start();
         return "/index";
     }
 

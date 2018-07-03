@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by gravel on 2018/04/13.
  */
 @Component("IPSpiderPipeline")
-public class IPSpiderPipeline implements Pipeline {
+public class JvaSpiderPipeline implements Pipeline {
 
     @Autowired
     MoviesMapper moviesMapper;
