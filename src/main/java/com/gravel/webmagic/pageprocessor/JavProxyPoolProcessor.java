@@ -69,6 +69,7 @@ public class JavProxyPoolProcessor implements PageProcessor {
             m.setPublisher(publisher);
             m.setManufacturer(manufacturer);
             m.setSeries(series);
+            m.setTag("uncensored");
             m.setCategories(categories.substring(0,categories.length()-1).toString());
             m.setDownloadUrl(downloadUrl);
             m.setPicUrl(picUrl);
@@ -77,8 +78,8 @@ public class JavProxyPoolProcessor implements PageProcessor {
             }
         }
 
-        for(int i=0;i<71;i++) {
-            page.addTargetRequest("http://www.javbus.com/page/"+(i+1)+"/");
+        for(int i=0;i<44;i++) {
+            page.addTargetRequest("http://www.javbus.com/uncensored/page/"+(i+1)+"/");
         }
     }
 
@@ -126,14 +127,14 @@ public class JavProxyPoolProcessor implements PageProcessor {
         return site;
     }
 
-    public void start(JavProxyPoolProcessor processor, JvaSpiderPipeline ipPipeline) {
+    public void start(JavProxyPoolProcessor processor, JvaSpiderPipeline ipPipeline,String url) {
         final String ip = "127.0.0.1";
         final int port = 1080;
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(new Proxy(ip,port)));
 
         Spider.create(processor)
-                .addUrl("http://www.javbus.com/")
+                .addUrl(url)
                 .thread(5)
                 .setDownloader(httpClientDownloader)
                 .addPipeline(ipPipeline)

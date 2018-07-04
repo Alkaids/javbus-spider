@@ -28,8 +28,17 @@ public class StartUpController {
      */
     @RequestMapping("/")
     public String index() {
-        new Thread(() -> kdlProcessor.start(kdlProcessor, jvaSpiderPipeline)).start();
+        new Thread(() -> kdlProcessor.start(kdlProcessor, jvaSpiderPipeline,"https://www.javbus.com")).start();
         return "/index";
     }
 
+    /**
+     * index页面展示
+     * @return
+     */
+    @RequestMapping("/uncensored")
+    public String uncensored() {
+        new Thread(() -> kdlProcessor.start(kdlProcessor, jvaSpiderPipeline,"https://www.javbus.com/uncensored")).start();
+        return "/index";
+    }
 }
